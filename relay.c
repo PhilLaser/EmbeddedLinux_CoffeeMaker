@@ -77,29 +77,18 @@ void writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1, uint8_t opt2)
 	}
 }
 
-int main(int argc, char* argv[])
-{
-       	if(argc != 2){
-		printf("not enough arguments supplied\n");
-		return(1);
-	} 
+int main(){
        	
        	initDevice(); // initialize communication w/ GrovePi
         writeBlock(PIN_MODE, LED_pin, OUTPUT,0); // set the LED pin as OUTPUT on the GrovePi
-        usleep(1000 * 1000); // wait 1 second
+        usleep(500 * 1000); // wait 1 second
 
-	if(strcmp(argv[1], "on") == 0) {
-		printf("[pin %d][Relay ON]\n", LED_pin);
-		usleep(1000*1000);
-		writeBlock(DIGITAL_WRITE, LED_pin, (uint8_t) 1,0);
-		return(0);
-	}
-	if(strcmp(argv[1], "off") == 0){
-		printf("[pin %d][Relay OFF]\n", LED_pin);
-		usleep(1000*1000);
-		writeBlock(DIGITAL_WRITE, LED_pin, (uint8_t) 0,0);
-		return(0);
-	}
-		
+	printf("[pin %d][Relay ON]\n", LED_pin);
+	usleep(500*1000);
+	writeBlock(DIGITAL_WRITE, LED_pin, (uint8_t) 1,0);
+	printf("[pin %d][Relay OFF]\n", LED_pin);
+	usleep(500*1000);
+	writeBlock(DIGITAL_WRITE, LED_pin, (uint8_t) 0,0);
+	
         return 0;
 }
