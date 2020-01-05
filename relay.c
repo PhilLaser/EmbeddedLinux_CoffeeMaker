@@ -31,8 +31,8 @@ static const uint8_t INPUT = 0;
 static const uint8_t OUTPUT = 1;
 
 //Hardware
-static const int LED_pin = 4; // Grove LED is connected to digital port D4 on the GrovePi
-
+static const int RELAY_PIN_1 = 4;
+static const int RELAY_PIN_2 = 3;
 /**
  * Open the device and set device file
  */
@@ -77,18 +77,37 @@ void writeBlock(uint8_t command, uint8_t pin_number, uint8_t opt1, uint8_t opt2)
 	}
 }
 
-int main(){
+int main(int argc, char* argv[]){
        	
-       	initDevice(); // initialize communication w/ GrovePi
-        writeBlock(PIN_MODE, LED_pin, OUTPUT,0); // set the LED pin as OUTPUT on the GrovePi
-        usleep(500 * 1000); // wait 1 second
+	if(argc != 2){
+		printf("i need two arguments!");
+		return 1;
+	}
 
-	printf("[pin %d][Relay ON]\n", LED_pin);
-	usleep(500*1000);
-	writeBlock(DIGITAL_WRITE, LED_pin, (uint8_t) 1,0);
-	printf("[pin %d][Relay OFF]\n", LED_pin);
-	usleep(500*1000);
-	writeBlock(DIGITAL_WRITE, LED_pin, (uint8_t) 0,0);
+
+       	initDevice();
+        writeBlock(PIN_MODE, RELAY_PIN_1, OUTPUT,0);
+        usleep(200*1000);
+	writeBlock(PIN_MODE, RELAY_PIN_2, OUTPUT, 0);
+	usleep(200*1000); // wait 500 ms
 	
-        return 0;
+	if(strcmp(argv[1], "big") == 0){
+		printf("[pin %d][Relay ON]\n", RELAY_PIN_1);
+		usleep(500*1000);
+		writeBlock(DIGITAL_WRITE, RELAY_PIN_1, (uint8_t) 1,0);
+		printf("[pin %d][Relay OFF]\n", RELAY_PIN_1);
+		usleep(500*1000);
+		writeBlock(DIGITAL_WRITE, RELAY_PIN_1, (uint8_t) 0,0);		
+		return 0;
+	}
+
+	if(strcmp(argv[1], "small") == 0){
+		printf("[pin %d][Relay ON]\n", RELAY_PIN_2);
+		usleep(500*1000);
+		writeBlock(DIGITAL_WRITE, RELAY_PIN_2, (uint8_t) 1,0);
+		printf("[pin %d][Relay OFF]\n", RELAY_PIN_2);
+		usleep(500*1000);
+		writeBlock(DIGITAL_WRITE, RELAY_PIN_2, (uint8_t) 0,0);		
+		return 0;
+	}
 }
