@@ -18,6 +18,13 @@ def home():
             toggle_relay("small")
         if request.form.get("lungo_button") == 'Lungo':
             toggle_relay("big")
+
+        time = request.form.get("time")
+       
+        if request.form.get("radios") == 'Espresso':
+            Popen("echo /home/pi/coffee_maker/relay small | at now + " + time + " minutes", shell=True)
+        if request.form.get("radios") == 'Lungo':
+            Popen("echo /home/pi/coffee_maker/relay big | at now + " + time + " minutes", shell=True)
     return render_template("index.html")
 
 
